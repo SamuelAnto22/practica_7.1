@@ -1,15 +1,20 @@
-FROM node:14
+# 1. Usamos una imagen oficial de Node.js ligera como base
+FROM node:20-alpine
 
-# Create app directory
-WORKDIR /usr/src/app
+# 2. Creamos una carpeta de trabajo dentro del contenedor
+WORKDIR /app
 
-# Install app dependencies
-COPY package.json yarn.lock ./
-RUN yarn install
+# 3. Copiamos los archivos de dependencias
+COPY package*.json ./
 
-# Bundle app source
+# 4. Instalamos las dependencias
+RUN npm install
+
+# 5. Copiamos el resto de nuestro código (incluido app.js)
 COPY . .
 
+# 6. Exponemos el puerto (si tu app web usa el 8080, ponemos ese)
 EXPOSE 8080
 
-CMD [ "node", "app.js" ]
+# 7. El comando que se ejecutará al encender el contenedor
+CMD ["npm", "start"]
